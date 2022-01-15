@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: "jdbc:h2:file:./demoDB;AUTO_SERVER=TRUE"
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  h2:
+    console.enabled: true
+
+server:
+  error:
+    include-stacktrace: never
+  servlet:
+    context-path: /api
+
+jwt:
+  secret: secret
+  validity: 3600
+  get:
+    token:
+      uri: /authenticate
