@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 public class UserDTO {
     private long id;
     @NotBlank
-    @Size(min = 5, max = 32, message = "Username must be between length of 8 to 50.")
+    @Size(min = 5, max = 32, message = "Username must be between length of 8 to 32.")
     private String username;
     @Size(min = 8, max = 50, message = "Password must be between length of 8 to 50.")
     private String password;
