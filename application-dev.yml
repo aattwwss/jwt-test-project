@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: ${SPRING_DATABASE_URL}
-    username: ${SPRING_DATABASE_USERNAME}
-    password: ${SPRING_DATABASE_PASSWORD}
-    driverClassName: ${SPRING_DATABASE_PLATFORM}
+    url: "jdbc:h2:file:./demoDB;AUTO_SERVER=TRUE"
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
 
 server:
   error:
@@ -17,5 +17,3 @@ jwt:
   get:
     token:
       uri: /authenticate
-
-
