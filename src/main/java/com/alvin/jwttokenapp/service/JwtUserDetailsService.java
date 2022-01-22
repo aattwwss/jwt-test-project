@@ -4,6 +4,7 @@ import com.alvin.jwttokenapp.mapper.UserMapper;
 import com.alvin.jwttokenapp.model.dto.UserDTO;
 import com.alvin.jwttokenapp.model.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,10 @@ public class JwtUserDetailsService implements UserDetailsService {
         UserEntity newUser = new UserEntity();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        userMapper.addUser(newUser);
+        try {
+            userMapper.addUser(newUser);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicateKeyException("Username already used: " + user.getUsername());
+        }
     }
 }

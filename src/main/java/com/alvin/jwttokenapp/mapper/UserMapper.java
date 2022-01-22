@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper {
 
-    @Select("SELECT * FROM app_user WHERE USERNAME = #{username}")
+    @Select("SELECT * FROM app_user WHERE username = #{username}")
     UserEntity findUserByUsername(@Param("username") String username);
 
-    @Insert("insert into app_user (username, password) values(#{username}, #{password});")
+    @Insert("INSERT INTO app_user (username, password) VALUES(#{username}, #{password});")
     void addUser(UserEntity entity);
 }
 
