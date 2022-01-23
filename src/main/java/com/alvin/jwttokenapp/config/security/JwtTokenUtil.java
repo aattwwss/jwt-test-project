@@ -1,4 +1,4 @@
-package com.alvin.jwttokenapp.config;
+package com.alvin.jwttokenapp.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

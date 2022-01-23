@@ -1,4 +1,4 @@
-package com.alvin.jwttokenapp.config;
+package com.alvin.jwttokenapp.config.security;
 
 import com.alvin.jwttokenapp.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests()
-                .antMatchers("/authenticate", "/register", "/h2-console/**", "/test/**").permitAll()
+                .antMatchers("/authenticate", "/register").permitAll()
                 // all other requests need to be authenticated
                 .anyRequest().authenticated().and()
                 // make sure we use stateless session; session won't be used to

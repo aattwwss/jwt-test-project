@@ -1,4 +1,4 @@
-package com.alvin.jwttokenapp.config;
+package com.alvin.jwttokenapp.config.security;
 
 import com.alvin.jwttokenapp.service.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;

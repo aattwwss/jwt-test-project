@@ -1,4 +1,4 @@
-package com.alvin.jwttokenapp.config;
+package com.alvin.jwttokenapp.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

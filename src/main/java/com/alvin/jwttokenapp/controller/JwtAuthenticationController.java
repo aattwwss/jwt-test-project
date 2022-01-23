@@ -1,6 +1,6 @@
 package com.alvin.jwttokenapp.controller;
 
-import com.alvin.jwttokenapp.config.JwtTokenUtil;
+import com.alvin.jwttokenapp.config.security.JwtTokenUtil;
 import com.alvin.jwttokenapp.model.JwtRequest;
 import com.alvin.jwttokenapp.model.JwtResponse;
 import com.alvin.jwttokenapp.model.dto.UserDTO;
