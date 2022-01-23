@@ -2,7 +2,9 @@ package com.alvin.jwttokenapp.service;
 
 import com.alvin.jwttokenapp.mapper.UserMapper;
 import com.alvin.jwttokenapp.model.dto.UserDTO;
+import com.alvin.jwttokenapp.model.entity.Role;
 import com.alvin.jwttokenapp.model.entity.UserEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.User;
@@ -12,8 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
@@ -29,7 +33,11 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        user.setRoles(userMapper.findRolesByUserId(user.getId()));
+        Set<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
+        user.setAuthorities(userMapper.findAuthoritiesByRoleIds(roleIds));
+        log.info(user.toString());
+        return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
     public void save(UserDTO user) {
