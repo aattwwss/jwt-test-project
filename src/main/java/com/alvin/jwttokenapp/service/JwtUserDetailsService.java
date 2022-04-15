@@ -1,12 +1,12 @@
 package com.alvin.jwttokenapp.service;
 
+import com.alvin.jwttokenapp.exception.UserAlreadyExistAuthenticationException;
 import com.alvin.jwttokenapp.mapper.UserMapper;
 import com.alvin.jwttokenapp.model.dto.UserDTO;
 import com.alvin.jwttokenapp.model.entity.Role;
 import com.alvin.jwttokenapp.model.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,13 +41,15 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public void save(UserDTO user) {
+        UserEntity dbUser = userMapper.findUserByUsername(user.getUsername());
+        if (dbUser != null) {
+            throw new UserAlreadyExistAuthenticationException("Username already taken: " + user.getUsername());
+        }
         UserEntity newUser = new UserEntity();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        try {
-            userMapper.addUser(newUser);
-        } catch (DuplicateKeyException e) {
-            throw new DuplicateKeyException("Username already used: " + user.getUsername());
-        }
+
+        userMapper.addUser(newUser);
+
     }
 }
