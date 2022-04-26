@@ -4,6 +4,7 @@ import com.alvin.jwttokenapp.model.entity.Authority;
 import com.alvin.jwttokenapp.model.entity.Role;
 import com.alvin.jwttokenapp.model.entity.UserEntity;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,25 @@ public interface UserMapper {
     UserEntity findUserByUsername(@Param("username") String username);
 
     @Insert("INSERT INTO app_user (username, password) VALUES(#{username}, #{password});")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void addUser(UserEntity entity);
+
+    @Insert("""
+            <script>
+            INSERT INTO app_user_role (
+                user_id,
+                role_id
+            )
+            VALUES
+                <foreach item='roleId' collection='roleIds' open='' separator=',' close=''>
+                    (
+                        #{userId},
+                        #{roleId}
+                    )
+                </foreach>
+            </script>
+            """)
+    void addUserRole(@Param("userId") long userId, @Param("roleIds") Set<Long> roleIds);
 
 
     @Select("""
@@ -30,6 +49,8 @@ public interface UserMapper {
             """)
     Set<Role> findRolesByUserId(@Param("userId") long userId);
 
+    @Select("select * from app_role where role = #{role};")
+    Role findRole(@Param("role") String role);
 
     @Select(""" 
             <script>
