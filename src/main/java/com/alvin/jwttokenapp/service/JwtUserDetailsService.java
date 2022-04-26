@@ -21,11 +21,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-
-    //    @Autowired
+    
     private final PasswordEncoder bcryptEncoder;
 
-    //    @Autowired
     private final UserMapper userMapper;
 
     public JwtUserDetailsService(PasswordEncoder bcryptEncoder, UserMapper userMapper) {
@@ -56,7 +54,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             log.error("Cannot find default role USER");
             throw new Exception("Error creating user.");
         }
-        
+
         UserEntity newUser = new UserEntity();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
