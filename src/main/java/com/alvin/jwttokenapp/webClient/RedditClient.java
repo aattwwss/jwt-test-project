@@ -3,6 +3,7 @@ package com.alvin.jwttokenapp.webClient;
 import com.alvin.jwttokenapp.model.dto.RedditSearchApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -15,14 +16,11 @@ import java.time.Duration;
 @Service
 public class RedditClient {
 
-    private static final String REDDIT_BASE_URL = "https://www.reddit.com";
     private static final long TIMEOUT = 5;
-
-
     private final WebClient webClient;
 
     @Autowired
-    public RedditClient() {
+    public RedditClient(@Value("${host.reddit}") String REDDIT_BASE_URL) {
         this.webClient = WebClient.builder()
                 .baseUrl(REDDIT_BASE_URL)
                 .filter(logRequest())

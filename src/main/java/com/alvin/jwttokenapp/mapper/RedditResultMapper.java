@@ -2,13 +2,17 @@ package com.alvin.jwttokenapp.mapper;
 
 import com.alvin.jwttokenapp.model.dto.RedditSearchApiResponse;
 import com.alvin.jwttokenapp.model.dto.RedditSearchResultResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class RedditResultMapper {
 
-    private static final String REDDIT_BASE_URL = "https://www.reddit.com";
+    @Value("${host.reddit}")
+    private String REDDIT_BASE_URL;
 
     public RedditSearchResultResponse toResult(RedditSearchApiResponse apiResponse) {
         if (apiResponse == null) {
@@ -17,12 +21,12 @@ public class RedditResultMapper {
 
         RedditSearchResultResponse dto = new RedditSearchResultResponse();
         List<RedditSearchResultResponse.Result> results = apiResponse.getData().getChildren().stream()
-                .map(res -> new RedditSearchResultResponse.Result(
-                        res.getData().getTitle(),
-                        REDDIT_BASE_URL + res.getData().getPermalink(),
-                        res.getData().getUrl(),
-                        res.getData().getUps(),
-                        res.getData().getDowns()))
+                .map(RedditSearchApiResponse.Child::getData)
+                .map(data -> new RedditSearchResultResponse.Result(
+                        data.getTitle(),
+                        REDDIT_BASE_URL + data.getPermalink(),
+                        data.getUrl(),
+                        data.getUps()))
                 .collect(Collectors.toList());
         dto.setResults(results);
         return dto;

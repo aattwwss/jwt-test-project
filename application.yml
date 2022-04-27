@@ -22,3 +22,6 @@ logging:
   level:
     com.alvin.jwttokenapp:
       mapper: DEBUG
+
+host:
+  reddit: https://www.reddit.com

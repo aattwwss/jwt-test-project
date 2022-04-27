@@ -25,10 +25,13 @@ public class TestController {
 
     GenderizeClient genderizeClient;
     RedditClient redditClient;
+    RedditResultMapper redditResultMapper;
 
-    TestController(GenderizeClient genderizeClient, RedditClient redditClient) {
+    TestController(GenderizeClient genderizeClient, RedditClient redditClient, RedditResultMapper redditResultMapper) {
         this.genderizeClient = genderizeClient;
         this.redditClient = redditClient;
+        this.redditResultMapper = redditResultMapper;
+
     }
 
     @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
@@ -53,9 +56,8 @@ public class TestController {
     @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
     @GetMapping("/reddit/search")
     public ResponseEntity<?> redditSearch(@RequestParam("searchTerm") String searchTerm) {
-        RedditResultMapper mapper = new RedditResultMapper();
         Mono<RedditSearchApiResponse> apiRes = redditClient.search(searchTerm);
-        RedditSearchResultResponse res = mapper.toResult(apiRes.block());
+        RedditSearchResultResponse res = redditResultMapper.toResult(apiRes.block());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

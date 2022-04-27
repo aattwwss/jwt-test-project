@@ -16,6 +16,5 @@ public class RedditSearchResultResponse {
         private String permalink;
         private String url;
         private int ups;
-        private int downs;
     }
 }
