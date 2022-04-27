@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +20,11 @@ import java.util.Map;
 @Slf4j
 public class TestController {
 
-    @Autowired
     GenderizeClient genderizeClient;
+
+    TestController(GenderizeClient genderizeClient) {
+        this.genderizeClient = genderizeClient;
+    }
 
     @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
     @GetMapping("/test")
