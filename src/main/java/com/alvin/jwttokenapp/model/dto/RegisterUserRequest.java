@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserDTO {
+public class RegisterUserRequest {
     private long id;
     @NotBlank
     @Size(min = 5, max = 32, message = "Username must be between length of 8 to 32.")

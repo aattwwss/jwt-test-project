@@ -1,12 +1,16 @@
 package com.alvin.jwttokenapp.controller;
 
+import com.alvin.jwttokenapp.model.dto.GenderPredictionResponse;
+import com.alvin.jwttokenapp.webClient.GenderizeClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +18,9 @@ import java.util.Map;
 @Controller
 @Slf4j
 public class TestController {
+
+    @Autowired
+    GenderizeClient genderizeClient;
 
     @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
     @GetMapping("/test")
@@ -25,5 +32,12 @@ public class TestController {
         testMap.put("2", "B");
         testMap.put("3", "C");
         return new ResponseEntity<>(testMap, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
+    @GetMapping("/predict")
+    public ResponseEntity<?> getGenderPrediction(@RequestParam("name") String name) {
+        GenderPredictionResponse dto = genderizeClient.getPrediction(name);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

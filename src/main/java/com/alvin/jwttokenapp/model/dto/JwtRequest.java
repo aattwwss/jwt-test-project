@@ -1,4 +1,4 @@
-package com.alvin.jwttokenapp.model;
+package com.alvin.jwttokenapp.model.dto;
 
 import java.io.Serializable;
 

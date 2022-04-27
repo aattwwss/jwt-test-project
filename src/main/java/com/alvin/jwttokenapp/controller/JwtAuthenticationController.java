@@ -1,9 +1,9 @@
 package com.alvin.jwttokenapp.controller;
 
 import com.alvin.jwttokenapp.config.security.JwtTokenUtil;
-import com.alvin.jwttokenapp.model.JwtRequest;
-import com.alvin.jwttokenapp.model.JwtResponse;
-import com.alvin.jwttokenapp.model.dto.UserDTO;
+import com.alvin.jwttokenapp.model.dto.JwtRequest;
+import com.alvin.jwttokenapp.model.dto.JwtResponse;
+import com.alvin.jwttokenapp.model.dto.RegisterUserRequest;
 import com.alvin.jwttokenapp.service.JwtUserDetailsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +39,7 @@ public class JwtAuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> saveUser(@RequestBody @Valid UserDTO user) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody @Valid RegisterUserRequest user) throws Exception {
         userDetailsService.save(user);
         return ResponseEntity.ok().build();
     }

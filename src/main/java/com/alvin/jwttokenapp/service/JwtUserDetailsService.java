@@ -1,10 +1,10 @@
 package com.alvin.jwttokenapp.service;
 
 import com.alvin.jwttokenapp.exception.UserAlreadyExistAuthenticationException;
-import com.alvin.jwttokenapp.mapper.UserMapper;
-import com.alvin.jwttokenapp.model.dto.UserDTO;
+import com.alvin.jwttokenapp.dao.UserDAO;
+import com.alvin.jwttokenapp.model.dto.RegisterUserRequest;
 import com.alvin.jwttokenapp.model.entity.Role;
-import com.alvin.jwttokenapp.model.entity.UserEntity;
+import com.alvin.jwttokenapp.model.entity.AppUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,42 +24,41 @@ public class JwtUserDetailsService implements UserDetailsService {
     
     private final PasswordEncoder bcryptEncoder;
 
-    private final UserMapper userMapper;
+    private final UserDAO userDAO;
 
-    public JwtUserDetailsService(PasswordEncoder bcryptEncoder, UserMapper userMapper) {
+    public JwtUserDetailsService(PasswordEncoder bcryptEncoder, UserDAO userDAO) {
         this.bcryptEncoder = bcryptEncoder;
-        this.userMapper = userMapper;
+        this.userDAO = userDAO;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userMapper.findUserByUsername(username);
+        AppUser user = userDAO.findUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        user.setRoles(userMapper.findRolesByUserId(user.getId()));
+        user.setRoles(userDAO.findRolesByUserId(user.getId()));
         Set<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
-        user.setAuthorities(userMapper.findAuthoritiesByRoleIds(roleIds));
-        log.info(user.toString());
+        user.setAuthorities(userDAO.findAuthoritiesByRoleIds(roleIds));
         return new User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
-    public void save(UserDTO user) throws Exception {
-        UserEntity dbUser = userMapper.findUserByUsername(user.getUsername());
+    public void save(RegisterUserRequest user) throws Exception {
+        AppUser dbUser = userDAO.findUserByUsername(user.getUsername());
         if (dbUser != null) {
             throw new UserAlreadyExistAuthenticationException("Username already taken: " + user.getUsername());
         }
-        Role defaultRole = userMapper.findRole("USER");
+        Role defaultRole = userDAO.findRole("USER");
         if (defaultRole == null) {
             log.error("Cannot find default role USER");
             throw new Exception("Error creating user.");
         }
 
-        UserEntity newUser = new UserEntity();
+        AppUser newUser = new AppUser();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        userMapper.addUser(newUser);
-        userMapper.addUserRole(newUser.getId(), new HashSet<>(List.of(defaultRole.getId())));
+        userDAO.addUser(newUser);
+        userDAO.addUserRole(newUser.getId(), new HashSet<>(List.of(defaultRole.getId())));
 
     }
 }

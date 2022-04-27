@@ -1,8 +1,8 @@
-package com.alvin.jwttokenapp.mapper;
+package com.alvin.jwttokenapp.dao;
 
 import com.alvin.jwttokenapp.model.entity.Authority;
 import com.alvin.jwttokenapp.model.entity.Role;
-import com.alvin.jwttokenapp.model.entity.UserEntity;
+import com.alvin.jwttokenapp.model.entity.AppUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public interface UserMapper {
+public interface UserDAO {
 
 
     @Select("select * from app_user where username = #{username};")
-    UserEntity findUserByUsername(@Param("username") String username);
+    AppUser findUserByUsername(@Param("username") String username);
 
     @Insert("INSERT INTO app_user (username, password) VALUES(#{username}, #{password});")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    void addUser(UserEntity entity);
+    void addUser(AppUser entity);
 
     @Insert("""
             <script>
