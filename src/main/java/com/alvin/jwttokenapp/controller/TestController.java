@@ -1,7 +1,9 @@
 package com.alvin.jwttokenapp.controller;
 
+import com.alvin.jwttokenapp.mapper.RedditResultMapper;
 import com.alvin.jwttokenapp.model.dto.GenderPredictionResponse;
 import com.alvin.jwttokenapp.model.dto.RedditSearchApiResponse;
+import com.alvin.jwttokenapp.model.dto.RedditSearchResultResponse;
 import com.alvin.jwttokenapp.webClient.GenderizeClient;
 import com.alvin.jwttokenapp.webClient.RedditClient;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +53,9 @@ public class TestController {
     @PreAuthorize("hasAnyAuthority('/ADMIN/READ', '/APP/READ')")
     @GetMapping("/reddit/search")
     public ResponseEntity<?> redditSearch(@RequestParam("searchTerm") String searchTerm) {
-        Mono<RedditSearchApiResponse> res = redditClient.search(searchTerm);
-        return new ResponseEntity<>(res.block(), HttpStatus.OK);
+        RedditResultMapper mapper = new RedditResultMapper();
+        Mono<RedditSearchApiResponse> apiRes = redditClient.search(searchTerm);
+        RedditSearchResultResponse res = mapper.toResult(apiRes.block());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

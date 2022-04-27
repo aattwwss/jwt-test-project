@@ -6,27 +6,27 @@ import java.util.List;
 
 @Data
 public class RedditSearchApiResponse {
-    public String kind;
-    public Data data;
+    private String kind;
+    private Data data;
 
     @lombok.Data
-
     public static class Data {
-        String modhash;
-        List<Child> children;
+        private String modhash;
+        private List<Child> children;
     }
 
     @lombok.Data
     public static class Child {
-        String kind;
-        ChildData data;
+        private String kind;
+        private ChildData data;
     }
-    
+
     @lombok.Data
     public static class ChildData {
-        String title;
-        String url;
-        int ups;
-        int downs;
+        private String title;
+        private String permalink;
+        private String url;
+        private int ups;
+        private int downs;
     }
 }
