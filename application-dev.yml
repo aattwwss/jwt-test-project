@@ -21,3 +21,8 @@ jwt:
   get:
     token:
       uri: /authenticate
+
+logging:
+  level:
+    com.alvin.jwttokenapp:
+      dao: DEBUG

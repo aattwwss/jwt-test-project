@@ -21,7 +21,7 @@ jwt:
 logging:
   level:
     com.alvin.jwttokenapp:
-      mapper: DEBUG
+      dao: INFO
 
 host:
   reddit: https://www.reddit.com
