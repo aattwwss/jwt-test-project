@@ -1,12 +1,11 @@
 package com.alvin.jwttokenapp.webClient;
 
-import com.alvin.jwttokenapp.model.dto.GenderPredictionResponse;
+import com.alvin.jwttokenapp.model.dto.RedditSearchApiResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -14,29 +13,30 @@ import java.time.Duration;
 
 @Slf4j
 @Service
-public class GenderizeClient {
+public class RedditClient {
 
-    private static final String GENDERIZE_BASE_URL = "https://api.genderize.io";
+    private static final String REDDIT_BASE_URL = "https://www.reddit.com";
     private static final long TIMEOUT = 5;
 
 
     private final WebClient webClient;
 
     @Autowired
-    public GenderizeClient() {
+    public RedditClient() {
         this.webClient = WebClient.builder()
-                .baseUrl(GENDERIZE_BASE_URL)
+                .baseUrl(REDDIT_BASE_URL)
                 .filter(logRequest())
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(64 * 1024 * 1024))
+                        .build())
                 .build();
     }
 
-    public Mono<GenderPredictionResponse> getPrediction(String name) {
+    public Mono<RedditSearchApiResponse> search(String searchTerm) {
         return webClient.get()
-                .uri("?name={name}", name)
+                .uri("/search.json?q=url:{searchTerm}&sort=relevance&t=all", searchTerm)
                 .retrieve()
-                .onStatus(status -> status.value() == HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                        response -> Mono.error(new NotFoundException("Missing 'name' parameter.")))
-                .bodyToMono(GenderPredictionResponse.class)
+                .bodyToMono(RedditSearchApiResponse.class)
                 .timeout(Duration.ofSeconds(TIMEOUT));
     }
 
