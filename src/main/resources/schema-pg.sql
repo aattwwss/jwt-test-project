@@ -4,8 +4,7 @@ create table app_user
 (
     id       serial primary key,
     username varchar(32) not null,
-    password varchar     not null,
-    enabled  boolean     not null
+    password varchar     not null
 );
 
 create unique index app_user_username_uindex
