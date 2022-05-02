@@ -1,4 +1,4 @@
-set schema 'test';
+set schema 'app';
 
 create table app_user
 (

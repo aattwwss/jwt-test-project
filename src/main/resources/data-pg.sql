@@ -1,4 +1,4 @@
-set schema 'test';
+set schema 'app';
 
 insert into app_role (role)
 values ('ADMIN'),
