@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: ${SPRING_DATABASE_URL:jdbc:postgresql://192.168.1.52:5432/test?currentSchema=test}
-    username: ${SPRING_DATABASE_USERNAME:alvin}
-    password: ${SPRING_DATABASE_PASSWORD:password}
-    driverClassName: ${SPRING_DATABASE_PLATFORM:org.postgresql.Driver}
+    url: ${SPRING_DATABASE_URL}
+    username: ${SPRING_DATABASE_USERNAME}
+    password: ${SPRING_DATABASE_PASSWORD}
+    driverClassName: ${SPRING_DATABASE_PLATFORM}
 
 server:
   error:

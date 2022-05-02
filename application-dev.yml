@@ -1,13 +1,9 @@
 spring:
-  h2:
-    path: /h2-console
-    console:
-      enabled: true
   datasource:
-    url: "jdbc:h2:file:./demoDB;AUTO_SERVER=TRUE"
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://192.168.1.214:5432/app?currentSchema=app
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
 
 server:
   error:
